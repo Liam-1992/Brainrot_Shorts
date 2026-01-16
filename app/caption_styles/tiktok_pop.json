@@ -1,0 +1,17 @@
+{
+  "name": "tiktok_pop",
+  "font": "Impact",
+  "font_size": 80,
+  "primary_color": "&H00FFFFFF",
+  "secondary_color": "&H0000FFFF",
+  "outline_color": "&H00000000",
+  "back_color": "&H64000000",
+  "bold": -1,
+  "outline": 8,
+  "shadow": 4,
+  "alignment": 2,
+  "margin_l": 60,
+  "margin_r": 60,
+  "margin_v": 180,
+  "bounce_scale": 115
+}

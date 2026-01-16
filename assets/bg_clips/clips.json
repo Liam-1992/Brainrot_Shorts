@@ -1,0 +1,12 @@
+{
+  "clips": [
+    {
+      "file": "example1.mp4",
+      "tags": ["parkour", "gaming"]
+    },
+    {
+      "file": "example2.mp4",
+      "tags": ["satisfying", "oddly_relaxing"]
+    }
+  ]
+}

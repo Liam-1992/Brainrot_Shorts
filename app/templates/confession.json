@@ -1,0 +1,18 @@
+{
+  "name": "confession",
+  "style": "confession",
+  "description": "First-person confession with escalating stakes and quick beats.",
+  "system_prompt": "You are a viral short-form script writer. Output strict JSON only.",
+  "schema": {
+    "title": "string",
+    "hook": "string",
+    "beats": [{"t": "float", "text": "string", "on_screen": "string"}],
+    "full_voiceover_text": "string",
+    "keywords": ["string"]
+  },
+  "beat_rules": {
+    "spacing_seconds_min": 1.0,
+    "spacing_seconds_max": 3.0,
+    "pacing_note": "Tight confession beats with cliffhanger energy."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "brainrot_facts",
+  "style": "brainrot_facts",
+  "description": "Rapid-fire absurd facts with punchy pacing.",
+  "system_prompt": "You are a viral short-form script writer. Output strict JSON only.",
+  "schema": {
+    "title": "string",
+    "hook": "string",
+    "beats": [{"t": "float", "text": "string", "on_screen": "string"}],
+    "full_voiceover_text": "string",
+    "keywords": ["string"]
+  },
+  "beat_rules": {
+    "spacing_seconds_min": 1.0,
+    "spacing_seconds_max": 3.0,
+    "pacing_note": "Fast, clipped beats with escalating energy."
+  },
+  "forbidden_words": ["kill", "blood", "gun"],
+  "safe_rewrites": {
+    "kill": "ruin",
+    "blood": "juice",
+    "gun": "tool"
+  }
+}

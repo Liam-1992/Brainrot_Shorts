@@ -1,0 +1,17 @@
+{
+  "name": "mrbeast_bold",
+  "font": "Anton",
+  "font_size": 78,
+  "primary_color": "&H00FFFFFF",
+  "secondary_color": "&H0000FF00",
+  "outline_color": "&H00000000",
+  "back_color": "&H50000000",
+  "bold": -1,
+  "outline": 10,
+  "shadow": 6,
+  "alignment": 2,
+  "margin_l": 70,
+  "margin_r": 70,
+  "margin_v": 200,
+  "bounce_scale": 120
+}

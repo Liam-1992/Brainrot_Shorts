@@ -1,0 +1,3 @@
+﻿# Minimal dependencies
+huggingface_hub>=0.20.3
+

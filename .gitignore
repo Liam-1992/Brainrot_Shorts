@@ -1,0 +1,15 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+outputs/
+models/
+*.onnx
+*.gguf
+*.bin
+*.safetensors
+piper_windows_amd64/
+.pytest_cache/
+*.db
+hf_t2v_hunter/results.json
+hf_t2v_hunter/results.md

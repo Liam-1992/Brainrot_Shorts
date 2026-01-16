@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shorts Studio</title>
+    <link rel="stylesheet" href="/web/styles.css?v=1.1.3" />
+    <script defer src="/web/app.js?v=1.1.3"></script>
+  </head>
+  <body>
+    <div class="ambient"></div>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <p class="tag">Local-only pipeline</p>
+          <h1>Shorts Studio</h1>
+          <p class="sub">
+            Prompt to finished vertical video. Local models, punchy captions, and fast edits.
+          </p>
+        </div>
+        <div class="status-pill" id="health-pill">Checking dependencies...</div>
+      </header>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="generate">Generate</button>
+        <button class="tab" data-tab="gallery">Gallery</button>
+        <button class="tab" data-tab="presets">Presets</button>
+        <button class="tab" data-tab="assets">Assets</button>
+        <button class="tab" data-tab="campaigns">Campaigns</button>
+        <button class="tab" data-tab="settings">Settings</button>
+      </nav>
+
+      <section class="tab-panel active" id="tab-generate">
+        <div class="panel">
+          <h2>Generate</h2>
+          <form id="gen-form">
+            <label>
+              Prompt
+              <textarea name="topic_prompt" rows="4" required></textarea>
+              <p class="muted" id="prompt-help"></p>
+            </label>
+
+            <div class="row">
+              <label>
+                Template
+                <select name="template_name" id="template-select"></select>
+              </label>
+              <label>
+                Style
+                <select name="style">
+                  <option value="brainrot_facts">Brainrot facts</option>
+                  <option value="reddit_story">Reddit story</option>
+                  <option value="confession">Confession</option>
+                  <option value="ai_scary">AI scary</option>
+                  <option value="fast_rage">Fast rage</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row">
+              <label>
+                Duration (sec)
+                <input type="range" name="duration_seconds" min="10" max="120" value="35" />
+                <span id="duration-label">35s</span>
+              </label>
+              <label>
+                Background mode
+                <select name="bg_mode">
+                  <option value="random_clip">Random clip</option>
+                  <option value="single_clip_loop">Single clip loop</option>
+                  <option value="stitched_clips">Stitched clips</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row">
+              <label>
+                Background category
+                <select name="bg_category">
+                  <option value="">Any</option>
+                  <option value="parkour">Parkour</option>
+                  <option value="satisfying">Satisfying</option>
+                  <option value="gaming">Gaming</option>
+                  <option value="oddly_relaxing">Oddly relaxing</option>
+                </select>
+              </label>
+              <label>
+                Caption style
+                <select name="caption_style">
+                  <option value="tiktok_pop">TikTok pop</option>
+                  <option value="mrbeast_bold">MrBeast bold</option>
+                  <option value="podcast_clean">Podcast clean</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Caption Autofix</h3>
+              <label class="inline">
+                <input type="checkbox" name="caption_autofix_enabled" />
+                Enable caption autofix
+              </label>
+              <div class="row">
+                <label>
+                  Autofix mode
+                  <select name="caption_autofix_mode">
+                    <option value="group">Group</option>
+                    <option value="rewrite">Rewrite</option>
+                    <option value="group_then_rewrite">Group then rewrite</option>
+                  </select>
+                </label>
+                <label>
+                  Max chars/line
+                  <input type="number" name="max_chars_per_line" value="18" />
+                </label>
+                <label>
+                  Min caption duration
+                  <input type="number" step="0.05" name="min_caption_duration" value="0.55" />
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <label>
+                Voice
+                <select name="voice" id="voice-select"></select>
+              </label>
+              <label class="inline">
+                Preview voice
+                <button type="button" id="voice-preview-btn">Play</button>
+              </label>
+            </div>
+
+            <div class="row">
+              <label>
+                Speech speed
+                <input type="number" step="0.01" name="speech_speed" value="1.08" />
+              </label>
+              <label>
+                Seed (optional)
+                <input type="number" name="seed" />
+              </label>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Audio</h3>
+              <div class="row">
+                <label>
+                  Music bed
+                  <select name="music_bed">
+                    <option value="none">None</option>
+                    <option value="random">Random</option>
+                  </select>
+                </label>
+                <label>
+                  SFX pack
+                  <select name="sfx_pack">
+                    <option value="none">None</option>
+                    <option value="default">Default</option>
+                  </select>
+                </label>
+                <label>
+                  Mastering preset
+                  <select name="audio_mastering_preset">
+                    <option value="clean">Clean</option>
+                    <option value="hype" selected>Hype</option>
+                    <option value="aggressive">Aggressive</option>
+                  </select>
+                </label>
+                <label>
+                  Ducking strength
+                  <input type="number" step="0.05" name="music_ducking_strength" value="0.6" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Effects</h3>
+              <label>
+                Zoom punch
+                <input type="range" name="zoom_punch_strength" min="0" max="1" step="0.05" value="0.3" />
+              </label>
+              <label>
+                Shake
+                <input type="range" name="shake_strength" min="0" max="1" step="0.05" value="0.2" />
+              </label>
+              <label>
+                Drift
+                <input type="range" name="drift_strength" min="0" max="1" step="0.05" value="0.3" />
+              </label>
+              <label>
+                Impact rate
+                <input type="range" name="impact_rate" min="0" max="1" step="0.05" value="0.2" />
+              </label>
+              <label>
+                Loop smoothing (sec)
+                <input type="number" step="0.05" name="loop_smoothing_seconds" value="0.35" />
+              </label>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Quality Gates</h3>
+              <label class="inline">
+                <input type="checkbox" name="quality_gate_enabled" />
+                Enable quality gates
+              </label>
+              <div class="row">
+                <label>
+                  Min hook score
+                  <input type="number" step="1" name="min_hook_score" value="70" />
+                </label>
+                <label>
+                  Max words/sec
+                  <input type="number" step="0.1" name="max_words_per_second" value="4.0" />
+                </label>
+                <label>
+                  Max retries
+                  <input type="number" step="1" name="max_retries" value="2" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Optimization Lab</h3>
+              <label class="inline">
+                <input type="checkbox" name="optimization_enabled" />
+                Enable optimization
+              </label>
+              <label class="inline">
+                <input type="checkbox" name="hook_first_enabled" checked />
+                Hook-first generation
+              </label>
+              <label class="inline">
+                <input type="checkbox" name="candidate_selection_enabled" checked />
+                Candidate selection
+              </label>
+              <div class="row">
+                <label>
+                  Max attempts
+                  <input type="number" step="1" name="optimization_max_attempts" value="5" />
+                </label>
+                <label>
+                  Strategy
+                  <select name="optimization_strategy">
+                    <option value="script_and_hook">Script + hook</option>
+                    <option value="hook_only">Hook only</option>
+                    <option value="script_only">Script only</option>
+                  </select>
+                </label>
+              </div>
+              <div class="row">
+                <label>
+                  Max words/sec (estimate)
+                  <input type="number" step="0.1" name="max_words_per_second_estimate" value="4.0" />
+                </label>
+                <label>
+                  Min beats/10s
+                  <input type="number" step="0.1" name="min_beats_per_10s" value="4.0" />
+                </label>
+                <label>
+                  Max beats/10s
+                  <input type="number" step="0.1" name="max_beats_per_10s" value="7.0" />
+                </label>
+              </div>
+              <div class="row">
+                <label>
+                  Hook pool size
+                  <input type="number" step="1" name="hook_pool_size" value="10" />
+                </label>
+                <label>
+                  Hook picks
+                  <input type="number" step="1" name="hook_pick" value="3" />
+                </label>
+                <label>
+                  Hook selection
+                  <select name="hook_selection_mode">
+                    <option value="score_only">Score only</option>
+                    <option value="score_plus_clarity">Score + clarity</option>
+                  </select>
+                </label>
+                <label>
+                  Script candidates
+                  <input type="number" step="1" name="script_candidate_count" value="3" />
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <label>
+                Preset
+                <select name="preset_name" id="preset-select">
+                  <option value="">None</option>
+                </select>
+              </label>
+              <label class="inline">
+                Preview render
+                <input type="checkbox" name="render_mode" value="preview" />
+              </label>
+            </div>
+
+            <label class="inline unhinged">
+              <input type="checkbox" name="unhinged" id="unhinged-toggle" />
+              UNHINGED mode
+            </label>
+
+            <div class="row actions">
+              <button type="submit" id="generate-btn">Generate</button>
+              <button type="button" id="generate-variations-btn">Generate 5 Variations</button>
+              <button type="button" id="variant-lab-btn">Variant Lab</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel status-panel">
+          <h2>Job Status</h2>
+          <div class="status">
+            <div class="bar">
+              <span id="progress-bar"></span>
+            </div>
+            <p id="status-text">Idle</p>
+            <p id="job-id" class="muted"></p>
+            <pre id="log-box"></pre>
+            <div class="preview-card">
+              <video id="preview-video" controls playsinline></video>
+              <a id="download-link" class="download" href="#" download>Download MP4</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-gallery">
+        <div class="panel">
+          <h2>Gallery</h2>
+          <div id="gallery-grid" class="gallery-grid"></div>
+        </div>
+        <div class="panel" id="gallery-detail">
+          <h2>Details</h2>
+          <div class="detail-body">
+            <img id="detail-thumb" alt="Thumbnail" />
+            <video id="detail-preview" controls playsinline></video>
+            <video id="detail-video" controls playsinline></video>
+            <p id="detail-meta" class="muted"></p>
+            <div class="panel subtle">
+              <h3>Render controls</h3>
+              <div class="row">
+                <label>
+                  Preview start (s)
+                  <input type="number" id="preview-start" value="0" min="0" step="0.5" />
+                </label>
+                <label>
+                  Preview duration (s)
+                  <input type="number" id="preview-duration" value="10" min="1" step="1" />
+                </label>
+              </div>
+              <div class="row">
+                <label class="inline">
+                  <input type="checkbox" id="regen-voice" />
+                  Regenerate voice
+                </label>
+                <label class="inline">
+                  <input type="checkbox" id="regen-captions" />
+                  Regenerate captions
+                </label>
+                <label class="inline">
+                  <input type="checkbox" id="regen-render" checked />
+                  Regenerate render
+                </label>
+              </div>
+              <div class="row actions">
+                <button type="button" id="preview-btn">Preview 10s</button>
+                <button type="button" id="render-final-btn">Final render</button>
+                <button type="button" id="rerender-btn">Re-render from beats</button>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Beats Editor</h3>
+              <table class="beats-table">
+                <thead>
+                  <tr>
+                    <th>T</th>
+                    <th>Text</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="beats-table-body"></tbody>
+              </table>
+              <div class="row actions">
+                <button type="button" id="add-beat-btn">Add beat</button>
+                <button type="button" id="save-beats-btn">Save beats</button>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Hook tools</h3>
+              <p id="hook-text" class="muted"></p>
+              <div class="row actions">
+                <button type="button" id="score-hook-btn">Score Hook</button>
+                <button type="button" id="rewrite-hook-btn">Rewrite Hook</button>
+                <span id="hook-score" class="muted"></span>
+              </div>
+              <div id="hook-candidates" class="hook-candidates"></div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Metrics</h3>
+              <canvas id="beat-chart" width="320" height="120"></canvas>
+              <canvas id="word-chart" width="320" height="120"></canvas>
+              <ul id="metrics-suggestions" class="metrics-list"></ul>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Optimization</h3>
+              <div id="optimization-list" class="metrics-list"></div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>AB Compare</h3>
+              <div id="ab-compare" class="compare-grid"></div>
+            </div>
+            <div class="panel subtle">
+              <h3>Validation</h3>
+              <pre id="validation-report"></pre>
+            </div>
+            <div class="panel subtle">
+              <h3>Caption Report</h3>
+              <pre id="caption-report"></pre>
+            </div>
+            <div class="row actions">
+              <button type="button" id="cancel-job-btn">Cancel Job</button>
+              <button type="button" id="publish-pack-btn">Publish Pack</button>
+              <a id="publish-pack-link" class="download" href="#" download>Download Pack</a>
+              <button type="button" id="virality-report-btn">Virality Report</button>
+              <a id="virality-report-link" class="download" href="#" download>Download Report</a>
+            </div>
+            <div class="row">
+              <label class="inline">
+                Steps
+                <span class="muted">script / voice / captions / render</span>
+              </label>
+            </div>
+            <div class="row">
+              <label class="inline"><input type="checkbox" value="script" class="rerun-step" />Script</label>
+              <label class="inline"><input type="checkbox" value="voice" class="rerun-step" />Voice</label>
+              <label class="inline"><input type="checkbox" value="captions" class="rerun-step" />Captions</label>
+              <label class="inline"><input type="checkbox" value="render" class="rerun-step" />Render</label>
+            </div>
+            <button type="button" id="rerun-btn">Rerun steps</button>
+            <a id="detail-download" class="download ready" href="#" download>Download MP4</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-presets">
+        <div class="panel">
+          <h2>Presets</h2>
+          <div id="preset-list" class="preset-list"></div>
+        </div>
+        <div class="panel">
+          <h2>Create / Update</h2>
+          <form id="preset-form">
+            <label>
+              Preset name
+              <input type="text" name="name" required />
+            </label>
+            <div class="row">
+              <label>
+                Style
+                <select name="style">
+                  <option value="brainrot_facts">Brainrot facts</option>
+                  <option value="reddit_story">Reddit story</option>
+                  <option value="confession">Confession</option>
+                  <option value="ai_scary">AI scary</option>
+                  <option value="fast_rage">Fast rage</option>
+                </select>
+              </label>
+              <label>
+                Duration
+                <input type="number" name="duration_seconds" value="35" />
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Voice
+                <input type="text" name="voice" value="en_US" />
+              </label>
+              <label>
+                Background mode
+                <select name="bg_mode">
+                  <option value="random_clip">Random clip</option>
+                  <option value="single_clip_loop">Single clip loop</option>
+                  <option value="stitched_clips">Stitched clips</option>
+                </select>
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Speech speed
+                <input type="number" step="0.01" name="speech_speed" value="1.08" />
+              </label>
+              <label>
+                Caption style
+                <select name="caption_style">
+                  <option value="tiktok_pop">TikTok pop</option>
+                  <option value="mrbeast_bold">MrBeast bold</option>
+                  <option value="podcast_clean">Podcast clean</option>
+                </select>
+              </label>
+            </div>
+            <div class="row">
+              <label class="inline">
+                <input type="checkbox" name="caption_autofix_enabled" />
+                Caption autofix
+              </label>
+              <label>
+                Autofix mode
+                <select name="caption_autofix_mode">
+                  <option value="group">Group</option>
+                  <option value="rewrite">Rewrite</option>
+                  <option value="group_then_rewrite">Group then rewrite</option>
+                </select>
+              </label>
+              <label>
+                Max chars/line
+                <input type="number" name="max_chars_per_line" value="18" />
+              </label>
+              <label>
+                Min caption duration
+                <input type="number" step="0.05" name="min_caption_duration" value="0.55" />
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Music bed
+                <input type="text" name="music_bed" value="none" />
+              </label>
+              <label>
+                SFX pack
+                <input type="text" name="sfx_pack" value="none" />
+              </label>
+              <label>
+                Mastering preset
+                <select name="audio_mastering_preset">
+                  <option value="clean">Clean</option>
+                  <option value="hype" selected>Hype</option>
+                  <option value="aggressive">Aggressive</option>
+                </select>
+              </label>
+              <label>
+                Ducking strength
+                <input type="number" step="0.05" name="music_ducking_strength" value="0.6" />
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Zoom punch
+                <input type="number" step="0.05" name="zoom_punch_strength" value="0.3" />
+              </label>
+              <label>
+                Shake
+                <input type="number" step="0.05" name="shake_strength" value="0.2" />
+              </label>
+              <label>
+                Drift
+                <input type="number" step="0.05" name="drift_strength" value="0.3" />
+              </label>
+              <label>
+                Impact rate
+                <input type="number" step="0.05" name="impact_rate" value="0.2" />
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Loop smoothing (sec)
+                <input type="number" step="0.05" name="loop_smoothing_seconds" value="0.35" />
+              </label>
+              <label class="inline">
+                <input type="checkbox" name="quality_gate_enabled" />
+                Quality gates
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Min hook score
+                <input type="number" step="1" name="min_hook_score" value="70" />
+              </label>
+              <label>
+                Max words/sec
+                <input type="number" step="0.1" name="max_words_per_second" value="4.0" />
+              </label>
+              <label>
+                Max retries
+                <input type="number" step="1" name="max_retries" value="2" />
+              </label>
+            </div>
+            <div class="row">
+              <label class="inline">
+                <input type="checkbox" name="optimization_enabled" />
+                Optimization enabled
+              </label>
+              <label class="inline">
+                <input type="checkbox" name="hook_first_enabled" checked />
+                Hook-first
+              </label>
+              <label class="inline">
+                <input type="checkbox" name="candidate_selection_enabled" checked />
+                Candidate selection
+              </label>
+              <label>
+                Max attempts
+                <input type="number" step="1" name="optimization_max_attempts" value="5" />
+              </label>
+              <label>
+                Strategy
+                <select name="optimization_strategy">
+                  <option value="script_and_hook">Script + hook</option>
+                  <option value="hook_only">Hook only</option>
+                  <option value="script_only">Script only</option>
+                </select>
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Max words/sec (estimate)
+                <input type="number" step="0.1" name="max_words_per_second_estimate" value="4.0" />
+              </label>
+              <label>
+                Min beats/10s
+                <input type="number" step="0.1" name="min_beats_per_10s" value="4.0" />
+              </label>
+              <label>
+                Max beats/10s
+                <input type="number" step="0.1" name="max_beats_per_10s" value="7.0" />
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Hook pool size
+                <input type="number" step="1" name="hook_pool_size" value="10" />
+              </label>
+              <label>
+                Hook picks
+                <input type="number" step="1" name="hook_pick" value="3" />
+              </label>
+              <label>
+                Hook selection
+                <select name="hook_selection_mode">
+                  <option value="score_only">Score only</option>
+                  <option value="score_plus_clarity">Score + clarity</option>
+                </select>
+              </label>
+              <label>
+                Script candidates
+                <input type="number" step="1" name="script_candidate_count" value="3" />
+              </label>
+            </div>
+            <button type="submit">Save preset</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-assets">
+        <div class="panel">
+          <h2>Assets</h2>
+          <div class="row">
+            <label>
+              Asset type
+              <select id="asset-type">
+                <option value="bg_clips">Background clips</option>
+                <option value="music">Music</option>
+                <option value="sfx">SFX</option>
+                <option value="fonts">Fonts</option>
+              </select>
+            </label>
+            <label>
+              Search
+              <input type="text" id="asset-search" placeholder="Filter by name or tag" />
+            </label>
+          </div>
+          <div id="asset-list" class="asset-list"></div>
+        </div>
+        <div class="panel">
+          <h2>Asset Detail</h2>
+          <div id="asset-detail">
+            <p class="muted">Select an asset to preview.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-campaigns">
+        <div class="panel">
+          <h2>Create Campaign</h2>
+          <form id="campaign-form">
+            <label>
+              Campaign name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Prompt file path (.txt)
+              <input type="text" name="file_path" placeholder="C:\\path\\to\\prompts.txt" required />
+            </label>
+            <label>
+              Preset name (optional)
+              <input type="text" name="preset_name" />
+            </label>
+            <button type="submit">Create campaign</button>
+          </form>
+        </div>
+        <div class="panel">
+          <h2>Campaigns</h2>
+          <div id="campaign-list" class="preset-list"></div>
+        </div>
+        <div class="panel">
+          <h2>Campaign Detail</h2>
+          <pre id="campaign-detail"></pre>
+          <div class="panel subtle">
+            <h3>Continuity status</h3>
+            <pre id="campaign-memory"></pre>
+            <button type="button" id="campaign-memory-reset-btn">Reset memory</button>
+          </div>
+          <div id="campaign-jobs" class="preset-list"></div>
+          <div class="row actions">
+            <button type="button" id="campaign-run-btn">Run campaign</button>
+            <button type="button" id="campaign-export-btn">Export ZIP</button>
+            <button type="button" id="campaign-export-pro-btn">Export Pro ZIP</button>
+            <a id="campaign-export-link" class="download" href="#" download>Download ZIP</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-settings">
+        <div class="panel">
+          <h2>Environment Setup</h2>
+          <p class="muted">Set required paths and model variables. Saved to `.env`.</p>
+          <form id="env-form">
+            <div class="panel subtle">
+              <h3>Core Tools</h3>
+              <div class="row">
+                <label>
+                  FFMPEG_PATH
+                  <input type="text" name="FFMPEG_PATH" />
+                </label>
+                <label>
+                  FFPROBE_PATH
+                  <input type="text" name="FFPROBE_PATH" />
+                </label>
+                <label>
+                  PIPER_PATH
+                  <input type="text" name="PIPER_PATH" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Piper Voices</h3>
+              <div class="row">
+                <label>
+                  PIPER_MODEL_PATH
+                  <input type="text" name="PIPER_MODEL_PATH" />
+                </label>
+                <label>
+                  PIPER_VOICES_DIR
+                  <input type="text" name="PIPER_VOICES_DIR" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>LLM Settings</h3>
+              <div class="row">
+                <label>
+                  LLM_BACKEND
+                  <input type="text" name="LLM_BACKEND" />
+                </label>
+                <label>
+                  LLM_MODEL_PATH
+                  <input type="text" name="LLM_MODEL_PATH" />
+                </label>
+              </div>
+              <div class="row">
+                <label>
+                  LLM_HOOK_MODEL_PATH
+                  <input type="text" name="LLM_HOOK_MODEL_PATH" />
+                </label>
+                <label>
+                  LLM_SCRIPT_MODEL_PATH
+                  <input type="text" name="LLM_SCRIPT_MODEL_PATH" />
+                </label>
+              </div>
+              <div class="row">
+                <label>
+                  LLM_MODEL_PATHS
+                  <input type="text" name="LLM_MODEL_PATHS" />
+                </label>
+                <label>
+                  LLM_CTX
+                  <input type="number" name="LLM_CTX" />
+                </label>
+                <label>
+                  LLM_MAX_TOKENS
+                  <input type="number" name="LLM_MAX_TOKENS" />
+                </label>
+                <label>
+                  LLM_TEMPERATURE
+                  <input type="number" step="0.1" name="LLM_TEMPERATURE" />
+                </label>
+                <label>
+                  LLM_N_GPU_LAYERS
+                  <input type="number" name="LLM_N_GPU_LAYERS" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Whisper Settings</h3>
+              <div class="row">
+                <label>
+                  WHISPER_MODEL_SIZE
+                  <input type="text" name="WHISPER_MODEL_SIZE" />
+                </label>
+                <label>
+                  WHISPER_MODEL_PATH
+                  <input type="text" name="WHISPER_MODEL_PATH" />
+                </label>
+                <label>
+                  WHISPER_DEVICE
+                  <input type="text" name="WHISPER_DEVICE" />
+                </label>
+                <label>
+                  WHISPER_COMPUTE_TYPE
+                  <input type="text" name="WHISPER_COMPUTE_TYPE" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Paths</h3>
+              <div class="row">
+                <label>
+                  ASSETS_DIR
+                  <input type="text" name="ASSETS_DIR" />
+                </label>
+                <label>
+                  BG_CLIPS_DIR
+                  <input type="text" name="BG_CLIPS_DIR" />
+                </label>
+                <label>
+                  FONTS_DIR
+                  <input type="text" name="FONTS_DIR" />
+                </label>
+                <label>
+                  MUSIC_DIR
+                  <input type="text" name="MUSIC_DIR" />
+                </label>
+                <label>
+                  SFX_DIR
+                  <input type="text" name="SFX_DIR" />
+                </label>
+                <label>
+                  OUTPUTS_DIR
+                  <input type="text" name="OUTPUTS_DIR" />
+                </label>
+                <label>
+                  MODELS_DIR
+                  <input type="text" name="MODELS_DIR" />
+                </label>
+                <label>
+                  TEMPLATES_DIR
+                  <input type="text" name="TEMPLATES_DIR" />
+                </label>
+                <label>
+                  CAPTION_STYLES_DIR
+                  <input type="text" name="CAPTION_STYLES_DIR" />
+                </label>
+                <label>
+                  PRESETS_PATH
+                  <input type="text" name="PRESETS_PATH" />
+                </label>
+                <label>
+                  DB_PATH
+                  <input type="text" name="DB_PATH" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>Caption Styling</h3>
+              <div class="row">
+                <label>
+                  CAPTION_FONT
+                  <input type="text" name="CAPTION_FONT" />
+                </label>
+                <label>
+                  CAPTION_FONT_SIZE
+                  <input type="number" name="CAPTION_FONT_SIZE" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel subtle">
+              <h3>System</h3>
+              <div class="row">
+                <label>
+                  MAX_CONCURRENT_JOBS
+                  <input type="number" name="MAX_CONCURRENT_JOBS" />
+                </label>
+                <label>
+                  SUBPROCESS_TIMEOUT_SECONDS
+                  <input type="number" name="SUBPROCESS_TIMEOUT_SECONDS" />
+                </label>
+                <label>
+                  ROUTING_MODE
+                  <input type="text" name="ROUTING_MODE" />
+                </label>
+                <label>
+                  ROUTING_POLICY
+                  <input type="text" name="ROUTING_POLICY" />
+                </label>
+                <label>
+                  WATCH_FOLDER_PATH
+                  <input type="text" name="WATCH_FOLDER_PATH" />
+                </label>
+                <label class="inline">
+                  <input type="checkbox" name="WATCH_FOLDER_ENABLED" />
+                  WATCH_FOLDER_ENABLED
+                </label>
+                <label>
+                  PLUGINS_ENABLED
+                  <input type="text" name="PLUGINS_ENABLED" />
+                </label>
+              </div>
+            </div>
+
+            <div class="row actions">
+              <button type="submit" id="env-save-btn">Save & Reload</button>
+              <button type="button" id="env-save-no-reload">Save</button>
+            </div>
+          </form>
+          <pre id="env-status">Load environment settings...</pre>
+        </div>
+
+        <div class="panel">
+          <h2>Health</h2>
+          <div id="health-grid" class="health-grid"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Recommended Models</h2>
+          <p class="muted">One-click downloads that auto-apply paths to `.env`.</p>
+          <div id="recommended-models" class="preset-list"></div>
+          <pre id="recommended-log">Idle</pre>
+        </div>
+
+        <div class="panel">
+          <h2>Model Routing</h2>
+          <form id="routing-form">
+            <div class="row">
+              <label>
+                Routing mode
+                <select name="routing_mode" id="routing-mode">
+                  <option value="manual">Manual</option>
+                  <option value="auto">Auto</option>
+                </select>
+              </label>
+              <label>
+                Policy
+                <select name="policy" id="routing-policy">
+                  <option value="fastest">Fastest</option>
+                  <option value="best_quality">Best quality</option>
+                  <option value="balanced">Balanced</option>
+                </select>
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Hook model
+                <select name="hook_model" id="hook-model-select"></select>
+              </label>
+              <label>
+                Script model
+                <select name="script_model" id="script-model-select"></select>
+              </label>
+            </div>
+            <div class="row actions">
+              <button type="submit">Save routing</button>
+              <button type="button" id="run-benchmarks-btn">Run benchmarks</button>
+            </div>
+          </form>
+          <pre id="benchmarks-list"></pre>
+        </div>
+
+        <div class="panel">
+          <h2>Automation</h2>
+          <div id="watch-folder-status" class="muted">Watch folder: unknown</div>
+          <div id="scheduler-status" class="muted">Scheduler: unknown</div>
+          <label class="inline">
+            <input type="checkbox" id="watch-approve-toggle" />
+            Approve before enqueue
+          </label>
+          <div class="row actions">
+            <button type="button" id="watch-folder-scan-btn">Scan now</button>
+            <button type="button" id="scheduler-dry-run-btn">Dry run</button>
+          </div>
+          <pre id="watch-folder-log"></pre>
+          <div class="panel subtle">
+            <h3>Pending batches</h3>
+            <div id="watch-pending-list" class="preset-list"></div>
+          </div>
+          <div class="panel subtle">
+            <h3>Scheduler runs</h3>
+            <div id="scheduler-runs" class="preset-list"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Batch Generation</h2>
+          <form id="batch-form">
+            <label>
+              Multi-line prompts
+              <textarea name="prompts" rows="4"></textarea>
+            </label>
+            <label>
+              Preset name (optional)
+              <input type="text" name="preset_name" />
+            </label>
+            <button type="submit">Run batch</button>
+          </form>
+          <pre id="batch-log"></pre>
+        </div>
+
+        <div class="panel">
+          <h2>AB Test</h2>
+          <form id="ab-form">
+            <label>
+              Topic prompt
+              <input type="text" name="topic_prompt" />
+            </label>
+            <label>
+              Preset name (optional)
+              <input type="text" name="preset_name" />
+            </label>
+            <div class="row">
+              <label>
+                Variant A caption style
+                <input type="text" name="a_caption_style" value="tiktok_pop" />
+              </label>
+              <label>
+                Variant B caption style
+                <input type="text" name="b_caption_style" value="mrbeast_bold" />
+              </label>
+            </div>
+            <div class="row">
+              <label>
+                Variant A voice
+                <input type="text" name="a_voice" value="en_US" />
+              </label>
+              <label>
+                Variant B voice
+                <input type="text" name="b_voice" value="en_US" />
+              </label>
+            </div>
+            <button type="submit">Run AB Test</button>
+          </form>
+          <pre id="ab-log"></pre>
+        </div>
+
+        <div class="panel">
+          <h2>Model Downloads</h2>
+          <form id="download-form">
+            <div class="row">
+              <label>
+                Model name
+                <input type="text" name="name" placeholder="my-model" />
+              </label>
+              <label>
+                Model type
+                <select name="kind">
+                  <option value="llm">LLM (GGUF)</option>
+                  <option value="whisper">Whisper (CT2)</option>
+                  <option value="piper">Piper voice</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              File URLs (one per line)
+              <textarea name="urls" rows="4" required></textarea>
+            </label>
+            <label class="inline">
+              <input type="checkbox" name="overwrite" />
+              Overwrite existing files
+            </label>
+            <button type="submit" id="download-btn">Download</button>
+          </form>
+          <div class="status">
+            <div class="bar">
+              <span id="download-progress-bar"></span>
+            </div>
+            <p id="download-status-text">Idle</p>
+            <p id="download-id" class="muted"></p>
+            <p id="download-path" class="muted"></p>
+            <pre id="download-log-box"></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="variant-modal">
+      <div class="modal-card">
+        <h2>Variant Lab</h2>
+        <p class="muted">Generate hooks and titles, then pick one to use.</p>
+        <button type="button" id="variant-close">Close</button>
+        <div id="variant-results"></div>
+      </div>
+    </div>
+
+    <div class="modal" id="env-modal">
+      <div class="modal-card">
+        <h2>Setup Required</h2>
+        <p class="muted">Missing required settings:</p>
+        <ul id="env-missing-list" class="metrics-list"></ul>
+        <div class="row actions">
+          <button type="button" id="env-modal-open">Open Settings</button>
+          <button type="button" id="env-modal-close">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "podcast_clean",
+  "font": "Arial",
+  "font_size": 64,
+  "primary_color": "&H00FFFFFF",
+  "secondary_color": "&H0000B7FF",
+  "outline_color": "&H00000000",
+  "back_color": "&H3C000000",
+  "bold": 0,
+  "outline": 4,
+  "shadow": 2,
+  "alignment": 2,
+  "margin_l": 80,
+  "margin_r": 80,
+  "margin_v": 160,
+  "bounce_scale": 108
+}
