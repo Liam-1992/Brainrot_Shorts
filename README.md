@@ -1,11 +1,37 @@
 # Shorts Studio (Local-Only)
 
+[![Local-Only](https://img.shields.io/badge/local--only-no%20cloud-blue?style=flat-square)](README.md)
+[![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](README.md)
+
 Shorts Studio is a local-first generator for vertical videos:
 
 Prompt -> local LLM script JSON -> Piper TTS -> faster-whisper captions -> ASS subtitles
 -> FFmpeg render -> `outputs/<job_id>/final.mp4` + `thumb.jpg`
 
 No cloud APIs.
+
+## Quickstart
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Copy `.env.example` to `.env` and set:
+```
+FFMPEG_PATH=ffmpeg
+FFPROBE_PATH=ffprobe
+PIPER_PATH=C:\path\to\piper.exe
+PIPER_MODEL_PATH=C:\path\to\en_US-voice.onnx
+LLM_MODEL_PATH=D:\models\your-model.gguf
+WHISPER_MODEL_PATH=D:\models\whisper\base
+```
+
+Add a background clip to `assets/bg_clips/`, then run:
+```bash
+uvicorn app.main:app --reload
+```
+Open `http://127.0.0.1:8000/` and generate a short.
 
 ## Setup
 
